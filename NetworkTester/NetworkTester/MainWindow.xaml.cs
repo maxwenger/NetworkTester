@@ -1,4 +1,5 @@
-﻿using System.Windows.Documents;
+﻿using System.Linq;
+using System.Windows.Documents;
 
 namespace NetworkTester
 {
@@ -36,9 +37,9 @@ namespace NetworkTester
         private void btn_addIp_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             var ip = tb_ip.Text;
-            var success = pingSender.AddAddress(ip);
+            pingSender.AddAddress(ip);
 
-            tb_ip.Text = success ? "" : "INVALID IP ADDRESS";
+            tb_ip.Text = "";
 
             dg_ipList.DataContext = typeof(List);
             dg_ipList.DataContext = pingSender.GetAddressList();
@@ -59,5 +60,11 @@ namespace NetworkTester
             });
         }
 
+        private void btn_removeIp_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var cells = dg_ipList.SelectedCells;
+            var ip = cells.Select(cell => cell.ToString()).ToList();
+
+        }
     }
 }

@@ -16,14 +16,14 @@ namespace NetworkTester
 
     public class PingSender
     {
-        private List<IPAddress> addressList;
+        private List<string> addressList;
 
         private Timer timer;
         private readonly int timeout;
 
         public PingSender(int interval = 2000, int timeout = 500)
         {
-            addressList = new List<IPAddress>();
+            addressList = new List<string>();
             this.timeout = timeout;
 
             timer = new Timer();
@@ -31,19 +31,14 @@ namespace NetworkTester
             timer.Interval = interval;
         }
 
-        public bool AddAddress(string ipString)
-        {
-            IPAddress address;
-            var isValidIp = IPAddress.TryParse(ipString, out address);
+        public void AddAddress(string ipString) =>
+            addressList?.Add(ipString);
 
-            if (isValidIp)
-            {
-                addressList.Add(address);
-            }
+        public void RemoveAddress(List<string> ipStrings) => 
+            addressList?.RemoveAll(ip => ipStrings.Any(s => s.Equals(ip)));
+        
 
-            return isValidIp;
-        }
-        public List<IPAddress> GetAddressList()
+        public List<string> GetAddressList()
         {
             return addressList;
         }
@@ -59,7 +54,7 @@ namespace NetworkTester
             {
                 using (var ping = new Ping())
                 {
-                    return new Ping().SendTaskAsync(ip.ToString());
+                    return new Ping().SendTaskAsync(ip);
                 }
             }).ToList();
 
@@ -93,13 +88,26 @@ namespace NetworkTester
             response = (s, e) =>
             {
                 ping.PingCompleted -= response;
-                tcs.SetResult(new PingResult()
+                if (e.Reply != null)
                 {
-                    Address = address,
-                    Status = e.Reply.Status.ToString(),
-                    RoundtripTime = e.Reply.RoundtripTime,
-                    TimeToLive = e.Reply.Options?.Ttl ?? -1
-                });
+                    tcs.SetResult(new PingResult()
+                    {
+                        Address = address,
+                        Status = e.Reply?.Status.ToString() ?? "INVALID",
+                        RoundtripTime = e.Reply?.RoundtripTime ?? -1,
+                        TimeToLive = e.Reply.Options?.Ttl ?? -1
+                    });
+                }
+                else
+                {
+                    tcs.SetResult(new PingResult()
+                    {
+                        Address = address,
+                        Status = "INVALID",
+                        RoundtripTime = -1,
+                        TimeToLive = -1
+                    });
+                }
             };
             ping.PingCompleted += response;
             ping.SendAsync(address, address);
