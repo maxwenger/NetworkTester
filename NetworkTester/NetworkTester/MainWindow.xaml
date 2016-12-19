@@ -16,12 +16,12 @@
                   IsReadOnly="True" FontSize="14">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Status" Binding="{Binding Path=Status}"/>
-                <DataGridTextColumn Header="Address" Binding="{Binding Path=Address}"/>
+                <DataGridTextColumn Header="Address" Binding="{Binding Path=DestinationAddress}"/>
                 <DataGridTextColumn Header="Roundtrip Time" Binding="{Binding Path=RoundtripTime}"/>
                 <DataGridTextColumn Header="TTL" Binding="{Binding Path=TimeToLive}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <controls:Flyout x:Name="flo_addIp" Header="Manage IPs" Position="Right" Theme="Accent" HorizontalAlignment="Right" Width="200">
+        <controls:Flyout x:Name="flo_addIp" Header="Manage IPs" Position="Right" Theme="Accent" HorizontalAlignment="Right" Width="200" d:IsHidden="True">
             <Grid>
                 <DataGrid x:Name="dg_ipList"
                           Margin="10,71,10,64"
