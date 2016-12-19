@@ -48,6 +48,9 @@ namespace NetworkTester
         private void btn_showAddFlyout_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             flo_addIp.IsOpen = true;
+
+            APIData apiData = LocationAPI.GetLocation("50.111.100.18");
+            GoogleMaps.FindImage(apiData.latitude, apiData.longitude);
         }
 
         public void OnAllPingsReceived(object source, PingEventArgs e)
