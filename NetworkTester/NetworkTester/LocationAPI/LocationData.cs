@@ -6,6 +6,12 @@
         public string Latitude { get; set; }
         public string Longitude { get; set; }
 
+        public LocationData()
+        {
+            
+        }
+
+        // TODO: Swap all refrences to auto initiliser
         public LocationData(string latitude, string longitude, string address)
         {
             Latitude = latitude;
@@ -31,7 +37,7 @@
         public string Longitude { get; set; }
         public string DmaCode { get; set; }
         public string AreaCode { get; set; }
-        public string Timezone { get; set; }
+        // public string Timezone { get; set; }
         public string Datetime { get; set; }
     }
     

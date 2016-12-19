@@ -33,7 +33,7 @@ namespace NetworkTester
             List<PingExtensions.PingResult> results;
             if (result.SourceAddress.Equals(result.DestinationAddress))
             {
-                results = new List<PingExtensions.PingResult>
+                results = new List<PingExtensions.PingResult>()
                 {
                     result
                 };
@@ -45,6 +45,7 @@ namespace NetworkTester
             else
             {
                 results = GetRoute(++nextHop);
+                results.Add(result);
             }
 
             return results;

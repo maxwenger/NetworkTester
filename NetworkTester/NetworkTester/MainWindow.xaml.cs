@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Documents;
+using NetworkTester.GoogleMaps;
 using NetworkTester.LocationAPI;
 
 namespace NetworkTester
@@ -72,10 +74,45 @@ namespace NetworkTester
             dg_ipList.DataContext = pingSender.GetAddressList();
         }
 
-        private void getTracerouteMap(string address)
+        private void GetTracerouteMap(string address)
         {
             var ips = new Traceroute(address).GetRoute();
-            var locations = ips.Select(ip => LocationAPI.LocationAPI.GetLocation(ip.SourceAddress)).ToList();
+            var locations = new List<LocationData>();
+
+            foreach (var pingResult in ips)
+            {
+                locations.Add(LocationAPI.LocationAPI.GetLocation(pingResult.SourceAddress));
+            }
+
+            var coordinates  = new List<Coordinate>();
+
+            foreach (var locationData in locations)
+            {
+                if(locationData.Longitude != null && locationData.Latitude != null) { 
+                    coordinates.Add(new Coordinate()
+                    {
+                        Longitude = double.Parse(locationData.Longitude),
+                        Latitude = double.Parse(locationData.Latitude)
+                    });
+
+                    // Debug.WriteLine($"{locationData.Longitude}, {locationData.Latitude}");
+                    Debug.WriteLine(coordinates.Count);
+
+
+                }
+            }
+
+            var maps = new GoogleMaps.GoogleMaps(coordinates);
+
+            var uri = maps.StaticMapBuilder();
+
+            var b = new Browser(uri);
+            b.Show();
+        }
+
+        private void brn_getTraceroute_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            GetTracerouteMap("50.111.100.18");
         }
     }
 }

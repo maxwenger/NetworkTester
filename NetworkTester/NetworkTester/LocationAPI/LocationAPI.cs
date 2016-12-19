@@ -1,5 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using System.Diagnostics;
+using Newtonsoft.Json;
 using System.Net;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 
 namespace NetworkTester.LocationAPI
 {
@@ -21,11 +24,22 @@ namespace NetworkTester.LocationAPI
                 json = webClient.DownloadString(apiUrl);
             }
     
-            var jsonObject = JsonConvert.DeserializeObject<RootObject>(json);
+            var jsonObject = JsonConvert.DeserializeObject<RootObject>(
+                json,
+                new JsonSerializerSettings()
+                {
+                    Error = delegate(object sender, ErrorEventArgs args)
+                    {
+                        args.ErrorContext.Handled = true;
+                    }
+                }
+                );
 
             var latitude = jsonObject.Data.Geo.Latitude;
             var longitude = jsonObject.Data.Geo.Longitude;
             var ip = jsonObject.Data.Geo.Ip;
+
+            Debug.WriteLine($"{ip} : {latitude}, {longitude}");
 
             var apiData = new LocationData(latitude, longitude, ip);
             

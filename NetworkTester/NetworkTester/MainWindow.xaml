@@ -45,6 +45,7 @@
 
             </Grid>
         </controls:Flyout>
+        <Button x:Name="brn_getTraceroute" Content="Traceroute" HorizontalAlignment="Left" Margin="242,10,0,0" VerticalAlignment="Top" Width="75" Click="brn_getTraceroute_Click"/>
     </Grid>
 </controls:MetroWindow>
 
