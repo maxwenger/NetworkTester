@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Documents;
+using NetworkTester.LocationAPI;
 
 namespace NetworkTester
 {
@@ -68,6 +70,12 @@ namespace NetworkTester
 
             dg_ipList.DataContext = typeof(List);
             dg_ipList.DataContext = pingSender.GetAddressList();
+        }
+
+        private void getTracerouteMap(string address)
+        {
+            var ips = new Traceroute(address).GetRoute();
+            var locations = ips.Select(ip => LocationAPI.LocationAPI.GetLocation(ip.SourceAddress)).ToList();
         }
     }
 }

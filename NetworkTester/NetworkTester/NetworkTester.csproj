@@ -92,7 +92,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GoogleMaps\GoogleMaps.cs" />
-    <Compile Include="LocationAPI\APIData.cs" />
+    <Compile Include="LocationAPI\LocationData.cs" />
     <Compile Include="LocationAPI\LocationAPI.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

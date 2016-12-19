@@ -10,7 +10,7 @@ namespace NetworkTester.LocationAPI
         /// </summary>
         /// <param name="_host">Can be an IP address, or website address. Ex: 8.8.8.8 or google.com</param>
         /// <returns></returns>
-        public static ApiData GetLocation(string _host)
+        public static LocationData GetLocation(string _host)
         {
             string json;
             var host = _host; 
@@ -25,9 +25,9 @@ namespace NetworkTester.LocationAPI
 
             var latitude = jsonObject.Data.Geo.Latitude;
             var longitude = jsonObject.Data.Geo.Longitude;
-            var datetime = jsonObject.Data.Geo.Datetime;
+            var ip = jsonObject.Data.Geo.Ip;
 
-            var apiData = new ApiData(latitude, longitude, datetime);
+            var apiData = new LocationData(latitude, longitude, ip);
             
 
             return apiData;

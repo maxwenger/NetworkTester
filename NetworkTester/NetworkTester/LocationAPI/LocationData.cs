@@ -1,16 +1,16 @@
 ﻿namespace NetworkTester.LocationAPI
 {
-    public class ApiData
+    public class LocationData
     {
+        public string Address { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }
-        public string Datetime { get; set; }
 
-        public ApiData(string latitude, string longitude, string datetime)
+        public LocationData(string latitude, string longitude, string address)
         {
             Latitude = latitude;
             Longitude = longitude;
-            Datetime = datetime;
+            Address = address;
         }
     }
 
