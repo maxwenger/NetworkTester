@@ -1,55 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NetworkTester
+﻿namespace NetworkTester.LocationAPI
 {
-    public class APIData
+    public class ApiData
     {
-        public string latitude { get; set; }
-        public string longitude { get; set; }
-        public string datetime { get; set; }
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
+        public string Datetime { get; set; }
 
-        public APIData(string latitude, string longitude, string datetime)
+        public ApiData(string latitude, string longitude, string datetime)
         {
-            this.latitude = latitude;
-            this.longitude = longitude;
-            this.datetime = datetime;
+            Latitude = latitude;
+            Longitude = longitude;
+            Datetime = datetime;
         }
     }
 
     public class Geo
     {
-        public string host { get; set; }
-        public string ip { get; set; }
-        public string rdns { get; set; }
-        public string asn { get; set; }
-        public string isp { get; set; }
-        public string country_name { get; set; }
-        public string country_code { get; set; }
-        public string region { get; set; }
-        public string city { get; set; }
-        public string postal_code { get; set; }
-        public string continent_code { get; set; }
-        public string latitude { get; set; }
-        public string longitude { get; set; }
-        public string dma_code { get; set; }
-        public string area_code { get; set; }
-        public string timezone { get; set; }
-        public string datetime { get; set; }
+        public string Host { get; set; }
+        public string Ip { get; set; }
+        public string Rdns { get; set; }
+        public string Asn { get; set; }
+        public string Isp { get; set; }
+        public string CountryName { get; set; }
+        public string CountryCode { get; set; }
+        public string Region { get; set; }
+        public string City { get; set; }
+        public string PostalCode { get; set; }
+        public string ContinentCode { get; set; }
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
+        public string DmaCode { get; set; }
+        public string AreaCode { get; set; }
+        public string Timezone { get; set; }
+        public string Datetime { get; set; }
     }
-
+    
+    // Used for JSON deserialisation.
     public class Data
     {
-        public Geo geo { get; set; }
+        public Geo Geo { get; set; }
     }
 
     public class RootObject
     {
-        public string status { get; set; }
-        public string description { get; set; }
-        public Data data { get; set; }
+        public string Status { get; set; }
+        public string Description { get; set; }
+        public Data Data { get; set; }
     }
 }
