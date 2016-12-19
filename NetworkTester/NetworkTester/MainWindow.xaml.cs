@@ -21,7 +21,7 @@ namespace NetworkTester
         private void btn_togglePings_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             isSendingPings = !isSendingPings;
-
+            
             if (isSendingPings)
             {
                 pingSender.Start();
@@ -63,8 +63,11 @@ namespace NetworkTester
         private void btn_removeIp_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             var cells = dg_ipList.SelectedCells;
-            var ip = cells.Select(cell => cell.ToString()).ToList();
+            var ips = cells.Select(cell => cell.ToString()).ToList();
+            pingSender.RemoveAddress(ips);
 
+            dg_ipList.DataContext = typeof(List);
+            dg_ipList.DataContext = pingSender.GetAddressList();
         }
     }
 }
