@@ -1,18 +1,20 @@
 ﻿namespace NetworkTester.LocationAPI
 {
-    public class ApiData
+    public class Location
     {
         public string Latitude { get; set; }
         public string Longitude { get; set; }
         public string Datetime { get; set; }
 
-        public ApiData(string latitude, string longitude, string datetime)
+        public Location(string latitude, string longitude, string datetime)
         {
             Latitude = latitude;
             Longitude = longitude;
             Datetime = datetime;
         }
     }
+
+    // Used for JSON deserialisation.
 
     public class Geo
     {
@@ -35,7 +37,6 @@
         public string Datetime { get; set; }
     }
     
-    // Used for JSON deserialisation.
     public class Data
     {
         public Geo Geo { get; set; }

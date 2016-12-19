@@ -1,5 +1,6 @@
 ﻿using Google.Maps;
 using Google.Maps.StaticMaps;
+using System.Collections.Generic;
 using System.Windows;
 
 namespace NetworkTester.GoogleMaps
@@ -21,6 +22,11 @@ namespace NetworkTester.GoogleMaps
             var imageSource = map.ToUri();
 
             Clipboard.SetText(imageSource.ToString());
+        }
+
+        public void GenerateMap(List<Location> locations)
+        {
+                      
         }
     }
 }
