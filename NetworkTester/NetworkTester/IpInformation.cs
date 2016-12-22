@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Automation.Peers;
 using GoogleMaps.LocationServices;
 using NetworkTester.Properties;
 using Newtonsoft.Json;
@@ -28,9 +24,8 @@ namespace NetworkTester
             var jsonObj = JsonConvert.DeserializeObject<IpLocation>(json);
 
             // TODO: Safety!!
-
-            Debug.WriteLine($"{jsonObj.IpAddress} : {jsonObj.City}, {jsonObj.StateProv}, {jsonObj.CountryCode}");
             jsonObj = PopulateLatitudeLongitude(jsonObj);
+            Debug.WriteLine($"{jsonObj.IpAddress} : {jsonObj.City}, {jsonObj.StateProv}, {jsonObj.CountryCode} | {jsonObj.Latitude}, {jsonObj.Longitude}");
             return jsonObj;
         }
 
@@ -41,12 +36,18 @@ namespace NetworkTester
             var locationService = new GoogleLocationService();
             var point = locationService.GetLatLongFromAddress(address);
 
+            point = point ?? new MapPoint()
+            {
+                Longitude = 0,
+                Latitude = 0
+            };
+
             return new IpLocation()
             {
-                IpAddress = location.IpAddress,
-                CountryCode = location.CountryCode,
-                StateProv = location.StateProv,
-                City = location.City,
+                IpAddress = location.IpAddress ?? "0.0.0.0",
+                CountryCode = location.CountryCode ?? "ZZ",
+                StateProv = location.StateProv ?? "ZZ",
+                City = location.City ?? "ZZ",
                 Latitude = point.Latitude,
                 Longitude = point.Longitude
             };

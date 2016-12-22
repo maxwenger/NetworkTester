@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows.Documents;
 
 namespace NetworkTester
@@ -74,6 +72,7 @@ namespace NetworkTester
 
         private static void ShowTracerouteMap(string address)
         {
+            // TODO: Make multithreaded
             var ips = new Traceroute(address).GetRoute();
             var loc = ips.Select(pingResult => IpInformation.GetIpLocation(pingResult.SourceAddress)).ToList();
             var m = new Map(loc);
@@ -83,7 +82,7 @@ namespace NetworkTester
 
         private void brn_getTraceroute_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            ShowTracerouteMap("8.8.8.8");
+            ShowTracerouteMap(tb_traceroute.Text);
         }
     }
 }

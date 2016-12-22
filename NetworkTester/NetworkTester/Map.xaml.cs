@@ -13,6 +13,16 @@ namespace NetworkTester
         public Map(List<IpLocation> locations)
         {
             this.locations = new List<IpLocation>(locations);
+
+            for (var i = locations.Count-1; i >= 0; i--)
+            {
+                var ipLocation = locations[i];
+                if (ipLocation.CountryCode.Equals("ZZ"))
+                {
+                    locations.Remove(ipLocation);
+                }
+            }
+
             InitializeComponent();
 
             var line = new LocationCollection();
@@ -31,7 +41,7 @@ namespace NetworkTester
 
             mp_map.Children.Add(polyline);
 
-            foreach (var ipLocation in this.locations)
+            foreach (var ipLocation in locations)
             {
                 var pin = new Pushpin
                 {

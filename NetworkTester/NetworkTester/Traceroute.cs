@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.NetworkInformation;
 
@@ -21,11 +22,29 @@ namespace NetworkTester
         public List<PingExtensions.PingResult> GetRoute(int nextHop = 1)
         {
             PingExtensions.PingResult result;
+
             using (var ping = new Ping())
             {
                 var options = PingOptionsFactory(nextHop);
-
-                var p = ping.Send(address, Timeout, new byte[32], options);
+                PingReply p;
+                try
+                {
+                    p = ping.Send(address, Timeout, new byte[32], options);
+                }
+                catch (PingException e)
+                {
+                    return new List<PingExtensions.PingResult>()
+                    {
+                        new PingExtensions.PingResult()
+                        {
+                            SourceAddress = "0.0.0.0",
+                            RoundtripTime = 0,
+                            Status = e.InnerException?.ToString(),
+                            DestinationAddress = address,
+                            TimeToLive = 0
+                        }
+                    };
+                }
 
                 result = PingResultFactory(nextHop, p);
             }
@@ -57,7 +76,7 @@ namespace NetworkTester
 
             if (p != null)
             {
-                result.SourceAddress = p.Address.ToString();
+                result.SourceAddress = p.Address?.ToString();
                 result.DestinationAddress = address;
                 result.Status = p.Status.ToString();
                 result.RoundtripTime = p.RoundtripTime;
