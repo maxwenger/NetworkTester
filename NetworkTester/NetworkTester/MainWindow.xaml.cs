@@ -69,5 +69,20 @@ namespace NetworkTester
             dg_ipList.DataContext = typeof(List);
             dg_ipList.DataContext = pingSender.GetAddressList();
         }
+
+        private static void ShowTracerouteMap(string address)
+        {
+            // TODO: Make multithreaded
+            var ips = new Traceroute(address).GetRoute();
+            var loc = ips.Select(pingResult => IpInformation.GetIpLocation(pingResult.SourceAddress)).ToList();
+            var m = new Map(loc);
+            m.Show();
+
+        }
+
+        private void brn_getTraceroute_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            ShowTracerouteMap(tb_traceroute.Text);
+        }
     }
 }

@@ -8,20 +8,22 @@
                       Width="401">
     <Grid>
         <Button x:Name="btn_showAddFlyout" Content="Settings" Margin="0,10,10,0" FontSize="10" Height="7" Click="btn_showAddFlyout_Click" VerticalAlignment="Top" HorizontalAlignment="Right" Width="61"/>
+        <TextBox x:Name="tb_traceroute" Margin="116,10,168,503" />
         <Button x:Name="btn_togglePings" Content="Start Pings" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="btn_togglePings_Click"/>
         <DataGrid x:Name="dg_pingResponces"
                   Margin="10,40,10,10"
                   ItemsSource="{Binding}"
+                  SelectionMode="Single"
                   AutoGenerateColumns="False"
                   IsReadOnly="True" FontSize="14">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Status" Binding="{Binding Path=Status}"/>
-                <DataGridTextColumn Header="Address" Binding="{Binding Path=Address}"/>
+                <DataGridTextColumn Header="Address" Binding="{Binding Path=DestinationAddress}"/>
                 <DataGridTextColumn Header="Roundtrip Time" Binding="{Binding Path=RoundtripTime}"/>
                 <DataGridTextColumn Header="TTL" Binding="{Binding Path=TimeToLive}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <controls:Flyout x:Name="flo_addIp" Header="Manage IPs" Position="Right" Theme="Accent" HorizontalAlignment="Right" Width="200">
+        <controls:Flyout x:Name="flo_addIp" Header="Manage IPs" Position="Right" Theme="Accent" HorizontalAlignment="Right" Width="200" d:IsHidden="True">
             <Grid>
                 <DataGrid x:Name="dg_ipList"
                           Margin="10,71,10,64"
@@ -45,6 +47,7 @@
 
             </Grid>
         </controls:Flyout>
+        <Button x:Name="brn_getTraceroute" Content="Traceroute" HorizontalAlignment="Left" Margin="242,10,0,0" VerticalAlignment="Top" Width="75" Click="brn_getTraceroute_Click"/>
     </Grid>
 </controls:MetroWindow>
 
