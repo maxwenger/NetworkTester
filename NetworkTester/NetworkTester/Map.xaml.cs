@@ -9,12 +9,27 @@ namespace NetworkTester
     /// </summary>
     public partial class Map : Window
     {
-        private List<IpLocation> locations;
         public Map(List<IpLocation> locations)
         {
-            this.locations = new List<IpLocation>(locations);
+            InitializeComponent();
 
-            for (var i = locations.Count-1; i >= 0; i--)
+            mp_map.CredentialsProvider = new ApplicationIdCredentialsProvider()
+            {
+                ApplicationId = GetBingMapsApiKey()
+            };
+
+            RemoveInvalidLocations(locations);
+
+            var line = GetLocations(locations);
+
+            SetPolyline(line);
+
+            SetPushPins(locations);
+        }
+
+        private static void RemoveInvalidLocations(List<IpLocation> locations)
+        {
+            for (var i = locations.Count - 1; i >= 0; i--)
             {
                 var ipLocation = locations[i];
                 if (ipLocation.CountryCode.Equals("ZZ"))
@@ -22,25 +37,20 @@ namespace NetworkTester
                     locations.Remove(ipLocation);
                 }
             }
+        }
 
-            InitializeComponent();
-
+        private static LocationCollection GetLocations(List<IpLocation> locations)
+        {
             var line = new LocationCollection();
             foreach (var ipLocation in locations)
             {
                 line.Add(new Location(ipLocation.Latitude, ipLocation.Longitude));
             }
+            return line;
+        }
 
-            var polyline = new MapPolyline()
-            {
-                Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Blue),
-                StrokeThickness = 5,
-                Opacity = 0.7,
-                Locations = line
-            };
-
-            mp_map.Children.Add(polyline);
-
+        private void SetPushPins(List<IpLocation> locations)
+        {
             foreach (var ipLocation in locations)
             {
                 var pin = new Pushpin
@@ -50,7 +60,20 @@ namespace NetworkTester
                 mp_map.Children.Add(pin);
             }
         }
-        
+
+        private void SetPolyline(LocationCollection line)
+        {
+            var polyline = new MapPolyline()
+            {
+                Stroke = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Blue),
+                StrokeThickness = 5,
+                Opacity = 0.7,
+                Locations = line
+            };
+
+            mp_map.Children.Add(polyline);
+        }
+
         public string GetBingMapsApiKey() => Properties.Resources.BingMapsKey;
     }
 

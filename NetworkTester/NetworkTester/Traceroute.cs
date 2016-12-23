@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.NetworkInformation;
 
@@ -21,36 +20,10 @@ namespace NetworkTester
 
         public List<PingExtensions.PingResult> GetRoute(int nextHop = 1)
         {
-            PingExtensions.PingResult result;
-
-            using (var ping = new Ping())
-            {
-                var options = PingOptionsFactory(nextHop);
-                PingReply p;
-                try
-                {
-                    p = ping.Send(address, Timeout, new byte[32], options);
-                }
-                catch (PingException e)
-                {
-                    return new List<PingExtensions.PingResult>()
-                    {
-                        new PingExtensions.PingResult()
-                        {
-                            SourceAddress = "0.0.0.0",
-                            RoundtripTime = 0,
-                            Status = e.InnerException?.ToString(),
-                            DestinationAddress = address,
-                            TimeToLive = 0
-                        }
-                    };
-                }
-
-                result = PingResultFactory(nextHop, p);
-            }
+            var result = GetPingResult(nextHop);
 
             List<PingExtensions.PingResult> results;
-            if (result.SourceAddress.Equals(result.DestinationAddress))
+            if (result.DestinationAddress.Equals(result.SourceAddress))
             {
                 results = new List<PingExtensions.PingResult>()
                 {
@@ -59,7 +32,10 @@ namespace NetworkTester
             }
             else if (nextHop >= maxHops)
             {
-                results = null;
+                results = new List<PingExtensions.PingResult>()
+                {
+                    FailedPingResultFactory("Route exceded maximum hop count of " + maxHops)
+                };
             }
             else
             {
@@ -68,6 +44,39 @@ namespace NetworkTester
             }
 
             return results;
+        }
+
+        private PingExtensions.PingResult GetPingResult(int nextHop)
+        {
+            PingExtensions.PingResult result;
+            using (var ping = new Ping())
+            {
+                var options = PingOptionsFactory(nextHop);
+                try
+                {
+                    var p = ping.Send(address, Timeout, new byte[32], options);
+                    result = p != null ? 
+                        PingResultFactory(nextHop, p) : FailedPingResultFactory("Unable to reach " + address);
+                }
+                catch (PingException e)
+                {
+                    result = FailedPingResultFactory(e.Message);
+                }
+
+            }
+            return result;
+        }
+
+        private PingExtensions.PingResult FailedPingResultFactory(string e)
+        {
+            return new PingExtensions.PingResult()
+            {
+                SourceAddress = "0.0.0.0",
+                RoundtripTime = 0,
+                Status = e,
+                DestinationAddress = address,
+                TimeToLive = 0
+            };
         }
 
         private PingExtensions.PingResult PingResultFactory(int nextHop, PingReply p)
